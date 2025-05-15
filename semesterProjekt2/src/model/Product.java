@@ -14,10 +14,6 @@ public class Product {
 		this.skuNo = skuNo;
 		this.productQty = productQty;
 	}
-	//Den her er så vi kan lave en ny instans af product objektet uden at definere værdier
-	public Product() {
-
-	}
 	
 	public int getProductId() {
 		return productId;
