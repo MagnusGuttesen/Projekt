@@ -6,13 +6,15 @@ public class Product {
 	private String productName;
 	private int skuNo;
 	private int productQty;
+	private int productExp;
 	
-	public Product(int productId, String productName, int skuNo, int productQty) {
+	public Product(int productId, String productName, int skuNo, int productQty, int productExp) {
 		
 		this.productId = productId;
 		this.productName = productName;
 		this.skuNo = skuNo;
 		this.productQty = productQty;
+		this.productExp = productExp;
 	}
 	
 	public int getProductId() {
@@ -32,6 +34,10 @@ public class Product {
 		return productQty;
 	}
 	
+	public int getProductExp() {
+		return productExp;
+	}
+	
 	public void setProductId(int productId) {
 		this.productId = productId;
 	}
@@ -47,4 +53,9 @@ public class Product {
 	public void setProductQty(int productQty) {
 		this.productQty = productQty;
 	}
+	
+	public void setProductExp(int productExp) {
+		this.productExp = productExp;
+	}
+	
 }

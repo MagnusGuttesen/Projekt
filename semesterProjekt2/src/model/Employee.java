@@ -5,26 +5,30 @@ public class Employee {
 	private String employeeId;
 	private String password;
 	private String name;
+	private String email;
 	
-	public Employee(String employeeId, String password, String name) {
+	/*public Employee(String employeeId, String password, String name, String email) {
 		
 		this.employeeId = employeeId;
 		this.password = password;
 		this.name = name; 
-	}
+		this.email = email;
+	}*/
 		
 	public String getEmployeeId() {
 		return employeeId;
-			
 	}
 		
 	public String getPassword() {
 		return password;
-			
 	}
 		
-	public String getname() {
+	public String getName() {
 		return name;
+	}
+	
+	public String getEmail() {
+		return email;
 	}
 			
 	public void setEmployeeId(String employeeId) {
@@ -36,7 +40,10 @@ public class Employee {
 	}
 			
 	public void setName(String name) {
-		this.name = name; 
-				
+		this.name = name; 	
+	}
+	
+	public void setEmail(String email) {
+		this.email = email; 
 	}
 }
