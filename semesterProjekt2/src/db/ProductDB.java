@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import db.DataAccessException;
+import db.ProductDB;
 import model.Product;
 
 
@@ -15,7 +15,7 @@ public class ProductDB implements ProductDBIF {
 
 	private static final String FIND_ALL_Q = "select productid, productname, skuno, productqty, productexp from product";
 	private PreparedStatement findAllPS;
-	
+
 	private static final String FIND_BY_PRODUCTNAME_OR_SKUNO_Q = FIND_ALL_Q
 			+ " where productname like ? or skuno = ?";
 	private PreparedStatement findByProductNameOrSkuNoPS;
@@ -25,11 +25,12 @@ public class ProductDB implements ProductDBIF {
 
 	private static final String INSERT_Q = "insert into product (productid, productname, skuno, productqty, productexp) values (?, ?, ?, ?, ?)";
 	private PreparedStatement insertPS;
-
 	
+	private static ProductDB instance;
+
 
 	public ProductDB() throws DataAccessException {
-		//cageDB = new CageDB(this);
+		
 		init();
 	}
 
@@ -47,6 +48,7 @@ public class ProductDB implements ProductDBIF {
 		}
 	}
 
+	@Override
 	public List<Product> findByProductName(String productName, boolean fullAssociation) throws DataAccessException {
 		List<Product> res = null;
 		try {
@@ -66,6 +68,7 @@ public class ProductDB implements ProductDBIF {
 		return res;
 	}
 
+	@Override
 	public Product findByProductId(int productId, boolean fullAssociation) throws DataAccessException {
 		Product res = null;
 		try {
@@ -80,7 +83,7 @@ public class ProductDB implements ProductDBIF {
 		}
 		return res;
 	}
-	
+
 	public List<Product> findByProductSkuNo(int skuNo, boolean fullAssociation) throws DataAccessException {
 		List<Product> res = null;
 		try {
@@ -115,12 +118,8 @@ public class ProductDB implements ProductDBIF {
 			currProduct.setSkuNo(rs.getInt("skuno"));
 			currProduct.setProductQty(rs.getInt("productqty"));
 			currProduct.setProductExp(rs.getInt("productExp"));
-			/*if (fullAssociation) {
-				Employee supervisor = findBySSN(currEmployee.getSupervisor().getSsn(), false); 
-				currEmployee.setSupervisor(supervisor);
-				Department department = this.departmentDB.findByDnumber(currEmployee.getDept().getDnumber(), false);
-				currEmployee.setDepartment(department);
-			}*/
+			currProduct.setProductId(rs.getInt("productId"));
+			
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
@@ -128,6 +127,7 @@ public class ProductDB implements ProductDBIF {
 		return currProduct;
 	}
 
+	@Override
 	public List<Product> findAll(boolean fullAssociation) throws DataAccessException {
 		ResultSet rs;
 		try {
@@ -139,6 +139,7 @@ public class ProductDB implements ProductDBIF {
 		List<Product> res = buildObjects(rs, fullAssociation);
 		return res;
 	}
+	@Override
 	public Product insert(Product product) throws DataAccessException {
 		// productname, skuno, productqty, productid, productexp
 		try {
@@ -147,7 +148,7 @@ public class ProductDB implements ProductDBIF {
 			insertPS.setInt(3, product.getProductQty());
 			insertPS.setInt(4, product.getProductId());
 			insertPS.setInt(5, product.getProductExp());
-			
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
@@ -161,5 +162,12 @@ public class ProductDB implements ProductDBIF {
 
 		return product;
 	}
+	
+
+	public List<Product> findByNameOrSku(String search) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }
 

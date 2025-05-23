@@ -8,21 +8,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.Cage;
+import model.Product;
 
 
 public class CageDB implements CageDBIF {
 
 	private static final String FIND_BY_CAGENO_Q = "select cageno from cage";
 	private PreparedStatement findByCageNoPS;
-	
+
 	private static final String INSERT_Q = "insert into cage (cageno) values (?)";
 	private PreparedStatement insertPS;
-
-
 	
+	private static final String FIND_ALL_Q = "select * from cage";
+	private PreparedStatement findAllPS;
+
 
 	public CageDB() throws DataAccessException {
-		//cageDB = new CageDB(this);
 		init();
 	}
 
@@ -30,6 +31,7 @@ public class CageDB implements CageDBIF {
 		Connection con = DBConnection.getInstance().getConnection();
 		try {
 			findByCageNoPS = con.prepareStatement(FIND_BY_CAGENO_Q);
+			findAllPS = con.prepareStatement(FIND_ALL_Q);
 			// using identity, we'd have to add
 														// Statement.RETURN_GENERATED_KEYS as a second argument
 		} catch (SQLException e) {
@@ -38,6 +40,33 @@ public class CageDB implements CageDBIF {
 		}
 	}
 	
+	private List<Cage> buildObjects(ResultSet rs, boolean fullAssociation) throws DataAccessException {
+		List<Cage> res = new ArrayList<>();
+		try {
+			while (rs.next()) {
+				Cage currCage = buildObject(rs, fullAssociation);
+				res.add(currCage);
+			}
+		} catch (SQLException e) {
+			// e.printStackTrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
+		}
+		return res;
+	}
+	
+	public List<Cage> findAll(boolean fullAssociation) throws DataAccessException {
+		ResultSet rs;
+		try {
+			rs = this.findAllPS.executeQuery();
+		} catch (SQLException e) {
+			// e.printStackTsrace();
+			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
+		}
+		List<Cage> res = buildObjects(rs, fullAssociation);
+		return res;
+	}
+
+	@Override
 	public Cage findByCageNo(int cageNo, boolean fullAssociation) throws DataAccessException {
 		Cage res = null;
 		try {
@@ -57,14 +86,7 @@ public class CageDB implements CageDBIF {
 		Cage currCage = new Cage();
 		try {
 			currCage.setCageNo(rs.getInt("cageNo"));
-			
-			
-			/*if (fullAssociation) {
-				Employee supervisor = findBySSN(currEmployee.getSupervisor().getSsn(), false); 
-				currEmployee.setSupervisor(supervisor);
-				Department department = this.departmentDB.findByDnumber(currEmployee.getDept().getDnumber(), false);
-				currEmployee.setDepartment(department);
-			}*/
+
 		} catch (SQLException e) {
 			// e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
@@ -73,3 +95,4 @@ public class CageDB implements CageDBIF {
 	}
 	
 	}
+

@@ -1,5 +1,6 @@
 package db;
 
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,20 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
-/**
- * @author gibe - update 2023
- * @author knol
- * @version 2018-08-30
- */
 public class DBConnection {
 	private Connection connection = null;
 	private static DBConnection dbConnection;
 
-	private static final String DBNAME = "DMA-CSD-S243_10632120";
+	private static final String DBNAME = "DMA-CSD-S243_10641029";
 	private static final String SERVERNAME = "hildur.ucn.dk";
 	private static final int PORTNUMBER = 1433;
-	private static final String USERNAME = "DMA-CSD-S243_10632120";
+	private static final String USERNAME = "DMA-CSD-S243_10641029";
 	private static final String PASSWORD = "Password1!";
 
 	private DBConnection() throws DataAccessException {
@@ -29,12 +24,10 @@ public class DBConnection {
 				DBNAME);
 		try {
 			connection = DriverManager.getConnection(urlString, USERNAME, PASSWORD);
+			
 		} catch (SQLException e) {
 			throw new DataAccessException(String.format("Could not connect to database %s@%s:%d user %s", DBNAME,
 					SERVERNAME, PORTNUMBER, USERNAME), e);
-			// System.out.println("Connection string was: " + connectionString.substring(0,
-			// connectionString.length() - password.length()) + "....");
-			// e.printStackTrace();
 		}
 	}
 
@@ -45,7 +38,7 @@ public class DBConnection {
 		return dbConnection;
 	}
 
-	public void startTransaction() throws DataAccessException {
+	/*public void startTransaction() throws DataAccessException {
 		try {
 			connection.setAutoCommit(false);
 		} catch (SQLException e) {
@@ -103,7 +96,7 @@ public class DBConnection {
 	}
 
 	public int executeInsertWithIdentity(PreparedStatement ps) throws DataAccessException {
-		// requires prepared statement to be created with the additional argument PreparedStatement.RETURN_GENERATED_KEYS  
+		// requires prepared statement to be created with the additional argument PreparedStatement.RETURN_GENERATED_KEYS
 		int res = -1;
 		try {
 			res = ps.executeUpdate();
@@ -117,7 +110,7 @@ public class DBConnection {
 			throw new DataAccessException("Could not execute insert", e);
 		}
 		return res;
-	}
+	}*/
 
 	public Connection getConnection() {
 		return connection;

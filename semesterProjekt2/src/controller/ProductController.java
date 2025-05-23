@@ -9,8 +9,9 @@ import model.Product;
 
 public class ProductController {
 	
+
 	ProductDB productDB;
-	
+
 	public ProductController() throws DataAccessException {
 		productDB = new ProductDB();
 
@@ -34,13 +35,17 @@ public class ProductController {
 	public List<Product> findBySkuNo(int skuNo) throws DataAccessException {
 		List<Product> res = productDB.findByProductSkuNo(skuNo, true);
 		return res;
-		
+
 	}
 	public Product insert(Product product) throws DataAccessException {
 		Product res = productDB.insert(product);
 		return res;
 	}
+	
+	public List<Product> findByNameOrSku(String search) {
+	    return productDB.findByNameOrSku(search);
+	}
 
 }
 
-	
+

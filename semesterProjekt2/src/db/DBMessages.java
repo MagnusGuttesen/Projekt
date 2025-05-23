@@ -1,10 +1,5 @@
 package db;
 
-/**
- * 
- * @author knol
- * @version 2018-08-30
- */
 public class DBMessages {
 	static final String COULD_NOT_READ_RESULTSET = "Could not read resultset";
 	static final String COULD_NOT_PREPARE_STATEMENT = "Could not prepare statement";
