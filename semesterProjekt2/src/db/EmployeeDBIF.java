@@ -9,6 +9,5 @@ public interface EmployeeDBIF {
 	Employee findEmployeeById(String employeeId, boolean fullAssociation) throws DataAccessException;
 	Employee findByEmail(String email, boolean fullAssociation) throws DataAccessException;
 	List<Employee> findByName(String name, boolean fullAssociation) throws DataAccessException;
-	List<Employee> findByPassword(String password, boolean fullAssociation) throws DataAccessException;
 	Employee insert(Employee employee) throws DataAccessException;
 }

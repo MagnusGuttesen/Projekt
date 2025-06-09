@@ -12,11 +12,14 @@ import model.RegisteredProduct;
 import db.RegisteredProductDB;
 import db.DataAccessException;
 
+//Dialog til registrering af produkter i bure
 public class RegisterProductUI extends JDialog {
 
     private int cageNo;
+ // Controller klasser bruges til at hente og håndtere data fra databasen
     private ProductController productController = new ProductController();
     private CageController cageController = new CageController();
+ // Modeller til at holde visninger af produkter og bure
     private DefaultListModel<Product> productListModel = new DefaultListModel<>();
     private DefaultListModel<Cage> cageListModel = new DefaultListModel<>();
     private JTable table;
@@ -30,21 +33,26 @@ public class RegisterProductUI extends JDialog {
     private JCheckBox checkBox;
     private JLabel expLabel;
 
+ // Konstruktør initialiserer data og bygger brugerfladen
     public RegisterProductUI(HovedmenuUI hovedmenuUI) throws DataAccessException {
         this.hovedmenuUI = hovedmenuUI;
+        
+     // Tilføjer data til modellerne fra databasen
         tableModel = new DefaultTableModel(new Object[] { "ProduktNavn", "ProduktID", "SkuNr" }, 0);
         productListModel.addAll(productController.findAll());
         cageListModel.addAll(cageController.findAll());
-        initUI();
+        initUI(); // Bygger GUI
     }
 
     private void initUI() {
         setBounds(100, 100, 800, 600);
         getContentPane().setLayout(new BorderLayout());
 
+     // Listepanel med produkter
         JPanel panel = new JPanel(new BorderLayout());
         JList<Product> productList = new JList<>(productListModel);
         productList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+     // Når et produkt vælges, vises dets navn i tekstfeltet
         productList.addListSelectionListener(e -> {
             Product p = productList.getSelectedValue();
             if (p != null) {
@@ -53,15 +61,18 @@ public class RegisterProductUI extends JDialog {
         });
         panel.add(new JScrollPane(productList), BorderLayout.WEST);
 
+     // Tabel der viser valgte produkter, som skal registreres
         table = new JTable(tableModel);
         panel.add(new JScrollPane(table), BorderLayout.CENTER);
         getContentPane().add(panel, BorderLayout.CENTER);
 
+     // Panel til inputfelter (produktnavn, mængde, bur, dato)
         JPanel infoPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
+     // Tilføj felter med labels for produkt, mængde og bur
         gbc.gridx = 0; gbc.gridy = 0;
         infoPanel.add(new JLabel("Produktnavn:"), gbc);
         gbc.gridx = 1;
@@ -83,6 +94,7 @@ public class RegisterProductUI extends JDialog {
         }
         infoPanel.add(cageSelector, gbc);
 
+     // Checkbox til aktivering af udløbsdato feltet
         gbc.gridx = 0; gbc.gridy++;
         infoPanel.add(new JLabel("Har udløbsdato:"), gbc);
         gbc.gridx = 1;
@@ -98,6 +110,7 @@ public class RegisterProductUI extends JDialog {
         textUdløbsdato.setVisible(false);
         infoPanel.add(textUdløbsdato, gbc);
 
+     // Viser/skjuler dato feltet afhængigt af checkbox
         checkBox.addActionListener(e -> {
             boolean vis = checkBox.isSelected();
             expLabel.setVisible(vis);
@@ -108,8 +121,10 @@ public class RegisterProductUI extends JDialog {
 
         getContentPane().add(infoPanel, BorderLayout.NORTH);
 
+     // Panel med knapper: Tilføj, Slet, Forsæt, Tilbage
         JPanel knapPanel = new JPanel();
 
+     // Tilføjer valgte produkt til tabel
         JButton btnTilføj = new JButton("Tilføj");
         btnTilføj.addActionListener(e -> {
             Product selected = productList.getSelectedValue();
@@ -123,6 +138,7 @@ public class RegisterProductUI extends JDialog {
         });
         knapPanel.add(btnTilføj);
 
+     // Sletter valgt række fra tabel
         JButton btnSlet = new JButton("Slet");
         btnSlet.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
@@ -132,6 +148,7 @@ public class RegisterProductUI extends JDialog {
         });
         knapPanel.add(btnSlet);
 
+     // Forsætter og gemmer registrering i databasen
         btnForsæt = new JButton("Forsæt");
         btnForsæt.addActionListener(e -> {
             try {
@@ -146,12 +163,13 @@ public class RegisterProductUI extends JDialog {
 
                     int quantity = Integer.parseInt(input);
                     RegisteredProduct rp = new RegisteredProduct();
-                    rp.setRegisteredid((int)(Math.random() * 100000));
+                    rp.setRegisteredid((int)(Math.random() * 100000)); // Midlertidig id generering
                     rp.setProductid(productId);
                     rp.setCageNo((int) cageSelector.getSelectedItem());
                     rp.setQuantity(quantity);
                     rp.setRegistrationdate(new Date(System.currentTimeMillis()));
 
+                 // Validering og parsing af udløbsdato
                     if (checkBox.isSelected()) {
                         String datoInput = textUdløbsdato.getText().trim();
                         if (!datoInput.isEmpty()) {
@@ -171,18 +189,20 @@ public class RegisterProductUI extends JDialog {
                         return;
                     }
 
-                    db.insert(rp);
+                    db.insert(rp); // Indsætter registreret produkt i databasen
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
+         // Viser bekræftelsesdialog
             dispose();
             RBekræftetUI dialog = new RBekræftetUI(hovedmenuUI, tableModel);
             dialog.setVisible(true);
         });
         knapPanel.add(btnForsæt);
 
+     // Lukker vinduet og vender tilbage til hovedmenu
         JButton btnTilbage = new JButton("Tilbage");
         btnTilbage.addActionListener(e -> {
             dispose();
@@ -192,7 +212,8 @@ public class RegisterProductUI extends JDialog {
 
         getContentPane().add(knapPanel, BorderLayout.SOUTH);
     }
-
+    
+ // Gør det muligt at hente model udefra (fx til tests)
     public DefaultTableModel getTableModel() {
         return tableModel;
     }

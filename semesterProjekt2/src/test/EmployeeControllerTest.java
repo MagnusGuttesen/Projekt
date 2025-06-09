@@ -49,13 +49,7 @@ class EmployeeControllerTest {
         assertNull(employee);
     }
 
-    @Test
-    void testFindByPassword_ShouldReturnMatchingEmployees() throws DataAccessException {
-        String password = "1234"; // Antag kodeord findes i databasen
-        List<Employee> employees = controller.findByPassword(password);
-        assertNotNull(employees);
-        assertTrue(employees.size() > 0);
-    }
+   
 
     @Test
     void testFindEmployeeById_ValidId_ShouldReturnEmployee() {

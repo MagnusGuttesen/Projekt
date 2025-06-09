@@ -23,7 +23,7 @@ public class CageController {
 		return res;
 	}
 
-	// Søger efter et specifikt bur baseret på bur-nummer
+	// Søger efter et specifikt bur baseret på bur nummer
 	public Cage findByCageNo(int cageNo) throws DataAccessException {
 		Cage res = cageDB.findByCageNo(cageNo, true);
 		return res;
@@ -39,7 +39,7 @@ public class CageController {
 		return null;
 	}
 
-	// Metode er placeholder og returnerer altid false - kunne bruges til bekræftelse
+	// Metode er placeholder og returnerer altid false 
 	public boolean confirmRegistration() {
 		// TODO Auto-generated method stub
 		return false;

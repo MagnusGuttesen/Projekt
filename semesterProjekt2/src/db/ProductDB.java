@@ -29,6 +29,7 @@ public class ProductDB implements ProductDBIF {
 	private static ProductDB instance;
 
 
+	// Konstruktør der initialiserer forbindelsen og PreparedStatements
 	public ProductDB() throws DataAccessException {
 		
 		init();
@@ -40,14 +41,15 @@ public class ProductDB implements ProductDBIF {
 			findAllPS = con.prepareStatement(FIND_ALL_Q);
 			findByProductNameOrSkuNoPS = con.prepareStatement(FIND_BY_PRODUCTNAME_OR_SKUNO_Q);
 			findByProductIdPS = con.prepareStatement(FIND_BY_PRODUCTID_Q);
-			insertPS = con.prepareStatement(INSERT_Q);// using identity, we'd have to add
-														// Statement.RETURN_GENERATED_KEYS as a second argument
+			insertPS = con.prepareStatement(INSERT_Q);
+			
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_PREPARE_STATEMENT, e);
 		}
 	}
 
+	// Søger produkter med navn, der matcher søgeteksten
 	@Override
 	public List<Product> findByProductName(String productName, boolean fullAssociation) throws DataAccessException {
 		List<Product> res = null;
@@ -62,12 +64,13 @@ public class ProductDB implements ProductDBIF {
 			ResultSet rs = findByProductNameOrSkuNoPS.executeQuery();
 			res = buildObjects(rs, fullAssociation);
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
 		}
 		return res;
 	}
 
+	// Finder et produkt ud fra dets ID
 	@Override
 	public Product findByProductId(int productId, boolean fullAssociation) throws DataAccessException {
 		Product res = null;
@@ -78,12 +81,13 @@ public class ProductDB implements ProductDBIF {
 				res = buildObject(rs, fullAssociation);
 			}
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
 		}
 		return res;
 	}
 
+	// Finder produkter ud fra deres SKU nummer
 	public List<Product> findByProductSkuNo(int skuNo, boolean fullAssociation) throws DataAccessException {
 		List<Product> res = null;
 		try {
@@ -91,12 +95,13 @@ public class ProductDB implements ProductDBIF {
 			ResultSet rs = findByProductNameOrSkuNoPS.executeQuery();
 			res = buildObjects(rs, fullAssociation);
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_OR_EXECUTE_QUERY, e);
 		}
 		return res;
 	}
 
+	// Konverterer flere rækker fra resultatsættet til en liste af produkt objekter
 	private List<Product> buildObjects(ResultSet rs, boolean fullAssociation) throws DataAccessException {
 		List<Product> res = new ArrayList<>();
 		try {
@@ -105,12 +110,13 @@ public class ProductDB implements ProductDBIF {
 				res.add(currProduct);
 			}
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
 		}
 		return res;
 	}
 
+	// Konverterer én række i resultatsættet til et produkt objekt
 	private Product buildObject(ResultSet rs, boolean fullAssociation) throws DataAccessException {
 		Product currProduct = new Product();
 		try {
@@ -121,7 +127,7 @@ public class ProductDB implements ProductDBIF {
 			currProduct.setProductId(rs.getInt("productId"));
 			
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
 		}
 		return currProduct;
@@ -133,7 +139,7 @@ public class ProductDB implements ProductDBIF {
 		try {
 			rs = this.findAllPS.executeQuery();
 		} catch (SQLException e) {
-			// e.printStackTsrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_READ_RESULTSET, e);
 		}
 		List<Product> res = buildObjects(rs, fullAssociation);
@@ -150,13 +156,13 @@ public class ProductDB implements ProductDBIF {
 			insertPS.setInt(5, product.getProductExp());
 
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_BIND_PS_VARS_INSERT, e);
 		}
 		try {
 			insertPS.executeUpdate();
 		} catch (SQLException e) {
-			// e.printStackTrace();
+			 e.printStackTrace();
 			throw new DataAccessException(DBMessages.COULD_NOT_INSERT, e);
 		}
 

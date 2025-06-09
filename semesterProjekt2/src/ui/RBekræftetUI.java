@@ -24,10 +24,11 @@ import java.awt.Color;
 public class RBekræftetUI extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private HovedmenuUI hovedmenuUI;
-    private JTable table;
+    private HovedmenuUI hovedmenuUI; // Reference til hovedmenuen, så man kan vende tilbage
+    private JTable table;  // Viser de registrerede produkter i en tabel
 
     public static void main(String[] args) {
+    	// Testkørsel af dialogen isoleret
         try {
             LogIndUI logIndUI = new LogIndUI();
             HovedmenuUI hovedmenuUI = new HovedmenuUI(logIndUI);
@@ -43,6 +44,7 @@ public class RBekræftetUI extends JDialog {
     public RBekræftetUI(HovedmenuUI hovedmenuUI, DefaultTableModel tableModel) {
         this.hovedmenuUI = hovedmenuUI;
 
+     // Opsætter størrelse og layout for dialogvinduet
         setBounds(100, 100, 648, 500);
         GridBagLayout gridBagLayout = new GridBagLayout();
         gridBagLayout.columnWidths = new int[] { 49, 0, 207, 113, 0, 0, 0, 0 };
@@ -52,6 +54,7 @@ public class RBekræftetUI extends JDialog {
                 Double.MIN_VALUE };
         getContentPane().setLayout(gridBagLayout);
 
+     // Overskriftstekst som bekræfter at produktet er registreret
         JLabel lblNewLabel = new JLabel("Produkt registreret!");
         lblNewLabel.setForeground(new Color(64, 0, 128));
         lblNewLabel.setFont(new Font("Cambria", Font.BOLD, 18));
@@ -63,6 +66,7 @@ public class RBekræftetUI extends JDialog {
         gbc_lblNewLabel.gridy = 1;
         getContentPane().add(lblNewLabel, gbc_lblNewLabel);
 
+     // Scrollpane til tabellen med registrerede produkter
         JScrollPane scrollPane = new JScrollPane();
         GridBagConstraints gbc_scrollPane = new GridBagConstraints();
         gbc_scrollPane.gridwidth = 2;
@@ -73,13 +77,16 @@ public class RBekræftetUI extends JDialog {
         gbc_scrollPane.gridy = 3;
         getContentPane().add(scrollPane, gbc_scrollPane);
 
+     // Tabellen viser data over registrerede produkter
         table = new JTable(tableModel);
         table.setFont(new Font("Cambria", Font.PLAIN, 12));
         scrollPane.setViewportView(table);
 
+     // Knappen lukker dialogen og returnerer til hovedmenu
         JButton btnTilbagetilmenu = new JButton("Tilbage til menu");
         btnTilbagetilmenu.setFont(new Font("Cambria", Font.PLAIN, 12));
         btnTilbagetilmenu.addActionListener(new ActionListener() {
+        	
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();

@@ -1,15 +1,23 @@
 package model;
 
+/*
+  Repræsenterer et produkt i systemet, som fx kan indsættes i databasen eller vises i brugergrænsefladen.
+ */
 public class Product {
 
-	private int productId;
-	private String productName;
-	private int skuNo;
-	private int productQty;
-	private int productExp;
+	private int productId;         // Unik ID for produktet i databasen
+	private String productName;    // Produktets navn
+	private int skuNo;             // SKU nummer 
+	private int productQty;        // Antal produkter på lager
+	private int productExp;        // Udløbsinformation som et heltal (fx antal dage til udløb)
 
+	/*
+	  Denne konstruktør bruges, når et nyt produkt skal oprettes manuelt i koden, 
+	  fx når et produkt registreres via et UI og derefter indsættes i databasen.
+	  
+	  Eksempel: bruges i ProductController.insert() for at oprette et nyt Product-objekt.
+	 */
 	public Product(int productId, String productName, int skuNo, int productQty, int productExp) {
-
 		this.productId = productId;
 		this.productName = productName;
 		this.skuNo = skuNo;
@@ -17,8 +25,13 @@ public class Product {
 		this.productExp = productExp;
 	}
 	
+	/*
+	  Denne tomme konstruktør bruges i databasen, når data hentes fra en ResultSet og objektet 
+	  konstrueres trinvis med setters.
+	  
+	  Eksempel: bruges i ProductDB.buildObject() til at opbygge produktet felt for felt.
+	 */
 	public Product() {
-		
 	}
 
 	public int getProductId() {
@@ -27,7 +40,6 @@ public class Product {
 
 	public String getProductName() {
 		return productName;
-
 	}
 
 	public int getSkuNo() {
@@ -60,12 +72,13 @@ public class Product {
 
 	public void setProductExp(int productExp) {
 		this.productExp = productExp;
-		
-		}
+	}
+
 	
+	//Bruges i fx lister og visninger i UI til at vise en kort beskrivelse af produktet.
+	 
 	@Override
 	public String toString() {
 	    return productName + " (SKU: " + skuNo + ", ID: " + productId + ")";
 	}
-
 }

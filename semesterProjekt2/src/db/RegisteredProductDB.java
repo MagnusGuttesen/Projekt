@@ -6,6 +6,8 @@ import java.util.List;
 
 import model.RegisteredProduct;
 
+/*Klassen håndterer databaseoperationer for RegisteredProduct objekter.
+  Den implementerer RegisteredProductDBIF og giver funktionen til at gemme og hente registrerede produkter.*/
 public class RegisteredProductDB implements RegisteredProductDBIF {
 
     private static final String INSERT_Q = 
@@ -25,6 +27,7 @@ public class RegisteredProductDB implements RegisteredProductDBIF {
         }
     }
 
+ // Henter alle registrerede produkter for et bestemt burnummer
     @Override
     public List<RegisteredProduct> findByCageNo(int cageNo) {
         List<RegisteredProduct> list = new ArrayList<>();
@@ -39,6 +42,7 @@ public class RegisteredProductDB implements RegisteredProductDBIF {
             ps.setInt(1, cageNo);
             ResultSet rs = ps.executeQuery();
 
+         // Gennemløber resultatet og opbygger RegisteredProduct objekter
             while (rs.next()) {
                 RegisteredProduct p = new RegisteredProduct();
                 p.setProductName(rs.getString("productname"));
@@ -54,7 +58,7 @@ public class RegisteredProductDB implements RegisteredProductDBIF {
 
         return list;
     }
-
+ // Indsætter et nyt registeret produkt objekt i databasen
     @Override
     public void insert(RegisteredProduct rp) throws SQLException {
         insertPS.setInt(1, rp.getRegisteredid());

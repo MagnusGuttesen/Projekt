@@ -15,9 +15,11 @@ import java.awt.Insets;
 public class HovedmenuUI extends JFrame {
 	private LogIndUI window;
 
+	// Konstruktøren opbygger GUI'en for hovedmenuen
 	public HovedmenuUI(LogIndUI window) {
 		this.window = window;
 
+		// Layoutet defineres med GridBagLayout, som giver fleksibel placering af komponenter
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 32, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0 };
@@ -36,6 +38,7 @@ public class HovedmenuUI extends JFrame {
 		gridBagLayout_1.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		getContentPane().setLayout(gridBagLayout_1);
 
+		// Opretter overskrift med titel "Hovedmenu"
 		JLabel lblHovedmenu = new JLabel("Hovedmenu");
 		lblHovedmenu.setForeground(new Color(64, 0, 128));
 		lblHovedmenu.setFont(new Font("Cambria", Font.BOLD, 18));
@@ -46,14 +49,16 @@ public class HovedmenuUI extends JFrame {
 		gbc_lblHovedmenu_1.gridy = 1;
 		getContentPane().add(lblHovedmenu, gbc_lblHovedmenu_1);
 		
+		// Knap til visning af produkter i et bur
 		JButton btnSeProdukter = new JButton("Se produkter i bur");
 		btnSeProdukter.addActionListener(e -> {
 			setVisible(false);
-		    new BurOversigtUI(this).setVisible(true);
+		    new BurOversigtUI(this).setVisible(true); // Åbner ny frame for burvisning
 		    
 		});
 		add(btnSeProdukter);
 
+		// Knap til åbning af registreringsvinduet for produkter i bur
 		JButton btnBur = new JButton("Bur");
 		btnBur.setFont(new Font("Cambria", Font.PLAIN, 12));
 		GridBagConstraints gbc_btnBur_1 = new GridBagConstraints();
@@ -78,8 +83,8 @@ public class HovedmenuUI extends JFrame {
 			}
 		});
 	
-		
 
+		// Placeholder-knapper til fremtidige funktioner (statistik, genbestilling, lagerstyring)
 		JButton btnGenbestil = new JButton("Genbestil");
 		btnGenbestil.setFont(new Font("Cambria", Font.PLAIN, 12));
 		GridBagConstraints gbc_btnGenbestil = new GridBagConstraints();
@@ -104,13 +109,13 @@ public class HovedmenuUI extends JFrame {
 		gbc_btnLstyring.gridy = 4;
 		getContentPane().add(btnLstyring, gbc_btnLstyring);
 
+		// Knap til at logge ud og vende tilbage til login-vinduet
 		JButton btnLogud_1 = new JButton("Log ud");
 		btnLogud_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose();
-				new LogIndUI();
+				dispose(); // Lukker nuværende vindue
+				new LogIndUI(); // Går tilbage til login
 				
-                
                 
 			}
 		});
